@@ -16,6 +16,7 @@ import { dirname } from 'path';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import libRouter from './routes/lib.js';
 
 var app = express();
 
@@ -29,7 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/book', usersRouter);
+app.use('/lib',libRouter);
 
 export default app;
-// module.exports = app;
