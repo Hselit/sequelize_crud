@@ -1,18 +1,21 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+
+import { Model,DataTypes } from 'sequelize';
+
+export default (sequelize) => {
   class library extends Model {
     
     static associate(models) {
-      // define association here
+      library.hasMany(models.book,{
+        foreignKey:'libraryId'
+      })
     }
   }
   library.init({
     libraryId: {
       type:DataTypes.STRING,
-      primaryKey:true
+      primaryKey:true,
+      allowNull:false
     },
     libraryName:{
       type:DataTypes.STRING,
@@ -28,8 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'library',
-    timestamps:false
+    timestamps:false,
+    tableName:"library",
+    modelName:"library"
   });
   return library;
 };
