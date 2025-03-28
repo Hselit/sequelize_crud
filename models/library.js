@@ -8,7 +8,7 @@ export default (sequelize) => {
     static associate(models) {
       library.hasMany(models.book,{
         foreignKey:'libraryId'
-      })
+      });
     }
   }
   library.init({

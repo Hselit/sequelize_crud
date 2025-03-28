@@ -37,7 +37,7 @@ router.post('/post',async(req,res)=>{
 });
 
 //get by id
-router.get('/:bid',async(req,res)=>{
+router.get('/:bid',async(req,res) => {
    try{
       const{bid} = req.params;
       const data = await library.findByPk(bid);
