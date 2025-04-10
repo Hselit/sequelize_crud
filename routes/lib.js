@@ -37,6 +37,35 @@ router.post('/post',async(req,res)=>{
    }
 });
 
+router.get('/getlibrary',async(req,res)=>{
+   try{
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit);
+      const offset = (page - 1)* limit;
+
+      const result = await library.findAndCountAll({
+         limit,
+         offset,
+         order:[['libraryId','ASC']],
+      });
+
+      if(!result){
+         return res.status(200).json({message:"No data Found"});
+      }
+      res.status(200).json({
+         totalRecords:result.count,
+         currentPage:page,
+         totalPages:Math.ceil(result.count/limit),
+         data:result.rows
+      });
+   }
+   catch(error){
+      console.log(error);
+      res.status(500).json({error:"Error Occured ",error});
+   }
+})
+
+
 //filter by libraryName
 router.get('/filter',async(req,res)=>{
    try{
