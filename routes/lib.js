@@ -2,6 +2,7 @@ import express from "express";
 var router = express.Router();
 
 import db from '../models/index.js';
+import { Op } from "sequelize";
 const {library,book} = db;
 
 //get method
@@ -36,13 +37,40 @@ router.post('/post',async(req,res)=>{
    }
 });
 
+//filter by libraryName
+router.get('/filter',async(req,res)=>{
+   try{
+     const {name} = req.query;
+     console.log(name);
+     if(!name){
+       return res.status(400).json({message:"Name query parameter is required"});
+     }
+     const filteredResult = await library.findAll({
+       where:{
+         libraryName:{
+           [Op.like]:`%${name}`
+         }
+       }
+     });
+     res.status(200).json({
+       total:filteredResult.length,
+       data:filteredResult
+     });
+   }
+   catch (error){
+     console.log(error);
+     res.status(500).json({error:"Error Occured ",error});
+   }
+ });
+
+ 
 //get by id
 router.get('/:bid',async(req,res) => {
    try{
       const{bid} = req.params;
       const data = await library.findByPk(bid);
       if(!data){
-         return res.status(404).json({error:"Error Occured "+error});
+         return res.status(404).json({message:"No library Found"});
       }
       res.status(200).json(data);
    }
